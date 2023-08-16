@@ -1,0 +1,77 @@
+{
+  "name": "aud-notifier",
+  "version": "1.0.0",
+  "description": "AUD Notifier is JS Library to access Javascript Notification Easily With Many Features",
+  "main": "./bin/aud-notifier.js",
+  "scripts": {
+    "build": "rollup -c",
+    "createWorker": "node lib\\serviceWorkerCreator",
+    "test": "karma start lib/ts/__tests__/karma.conf.js",
+    "postinstall": ""
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.[t|j]s?$": "babel-jest"
+    }
+  },
+  "files": [
+    "bin",
+    "README.md"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mohamedfakhreldin/AUD-Notifier.git"
+  },
+  "keywords": [
+    "notify",
+    "notification",
+    "api",
+    "pwa",
+    "notification API",
+    "notifier",
+    "audio-notifier",
+    "audio"
+    
+  ],
+  "author": "Mohamed Fakhr Eldin",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mohamedfakhreldin/AUD-Notifier/issues"
+  },
+  "homepage": "https://github.com/mohamedfakhreldin/AUD-Notifier#readme",
+
+  "bin": {
+    "notify": "./bin/serviceWorkerCreator.js"
+    
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.22.9",
+    "@babel/core": "^7.22.9",
+    "@babel/plugin-proposal-class-properties": "^7.5.5",
+    "@babel/plugin-proposal-decorators": "^7.4.4",
+    "@babel/plugin-proposal-export-namespace-from": "^7.5.2",
+    "@babel/plugin-proposal-function-sent": "^7.5.0",
+    "@babel/plugin-proposal-json-strings": "^7.2.0",
+    "@babel/plugin-proposal-numeric-separator": "^7.2.0",
+    "@babel/plugin-proposal-throw-expressions": "^7.2.0",
+    "@babel/plugin-syntax-dynamic-import": "^7.2.0",
+    "@babel/plugin-syntax-import-meta": "^7.2.0",
+    "@babel/plugin-transform-flow-strip-types": "^7.4.4",
+    "@babel/plugin-transform-strict-mode": "^7.2.0",
+    "@babel/polyfill": "^7.4.4",
+    "@babel/preset-env": "^7.22.9",
+  
+    "@babel/preset-typescript": "^7.22.5",
+    "@rollup/plugin-babel": "^6.0.3",
+    "@rollup/plugin-commonjs": "^25.0.3",
+    "@rollup/plugin-node-resolve": "^15.1.0",
+    "@rollup/plugin-terser": "^0.4.3",
+    "@rollup/plugin-typescript": "^11.1.2",
+    "karma": "^6.4.2",
+    "karma-firefox-launcher": "^2.1.2",
+    "karma-jasmine": "^5.1.0",
+    "rollup": "^3.28.0",
+    "tslib": "^2.6.1"
+
+  }
+}
