@@ -1,4 +1,4 @@
-import { AUDNotifierError } from "../errors/AUDNotifierError";
+
 import { NotificationOptions } from "../types/types";
 import Permission from "../Permissions/Permission";
 
@@ -189,10 +189,10 @@ export default abstract class Notify {
     }
     if (!this.Permission.isGranted()) {
       this.timeout = false;
-      throw new AUDNotifierError(
-        "you must allow notification to send browser notification"
-      );
+  console.error("AUDNotifierError: you must allow notification to send browser notification");
+      return false
     }
+    return true
   }
 _setPromisePolyfil(){
   

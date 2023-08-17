@@ -9,7 +9,7 @@ export    type NotificationOptions = {
         image?:string,
         renotify?:boolean,
         body?:string,
-        slient?:any
+        slient?:boolean
         dir?:NotificationDirection,
         lang?:string,
         id?:number

@@ -11,7 +11,7 @@ const common = {
     file: "bin/aud-notifier.js",
     format: "umd",
     name: "AUDNotifier",
-    sourcemap: true
+  
   },
   onwarn: function(warning, handler) {
     // Skip certain warnings

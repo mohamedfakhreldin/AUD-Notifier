@@ -20,7 +20,7 @@ export default class MozNotification extends Notify {
   }
 
   _showNotification(title: string, options: NotificationOptions) {
-    this._checkPermission();
+    
     let notification = navigator.mozNotification?.createNotification(
       options.icon,
       title,

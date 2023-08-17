@@ -18,20 +18,23 @@ export default class MSNotification extends Notify {
   }
 
   _showNotification(title: string, options: NotificationOptions) {
-    this._checkPermission();
-    window.external.msSiteModeClearIconOverlay();
-
-    window.external.msSiteModeSetIconOverlay(options.icon, title);
-
-    window.external.msSiteModeActivate();
-    let obj = {
-      close: window.external.msSiteModeClearIconOverlay,
-      then: function (callback) {
-        callback(this);
-      },
-    };
-    options.closeAfter && setTimeout(() => obj.close(), options.closeAfter);
-    return obj;
+    if (this._checkPermission()) {
+        
+      window.external.msSiteModeClearIconOverlay();
+      
+      window.external.msSiteModeSetIconOverlay(options.icon, title);
+      
+      window.external.msSiteModeActivate();
+      let obj = {
+        close: window.external.msSiteModeClearIconOverlay,
+        then: function (callback) {
+          callback(this);
+        },
+      };
+      options.closeAfter && setTimeout(() => obj.close(), options.closeAfter);
+      return obj;
+    }
+    return {close:()=>{}}
   }
   close() {
     window.external.msSiteModeClearIconOverlay();

@@ -17,21 +17,24 @@ export default class WebKitNotification extends Notify{
         }
     
         _showNotification(title: string,options?: NotificationOptions) {
-        this._checkPermission()
-            let notification = window. webkitNotifications?.createNotification(
-                options.icon,
-                title,
-                options.body
-            );
-            notification.show();
-            notification.close = notification.cancel
-            options.closeAfter &&    setTimeout(notification.close, options.closeAfter);
-            this.notifications[options.tag||this.id++]=notification
-            return {...notification,then:function(callback){
-                callback(notification)
-            }};
+       if (this._checkPermission()) {
+        
+           let notification = window. webkitNotifications?.createNotification(
+               options.icon,
+               title,
+               options.body
+               );
+               notification.show();
+               notification.close = notification.cancel
+               options.closeAfter &&    setTimeout(notification.close, options.closeAfter);
+               this.notifications[options.tag||this.id++]=notification
+               return {...notification,then:function(callback){
+                   callback(notification)
+                }};
+            }
+            return {close:()=>{}}
         }
-        close(tag:string){
+            close(tag:string){
             if(this.notifications[tag]){
                 this.notifications[tag].close()
                 delete this.notifications[tag];

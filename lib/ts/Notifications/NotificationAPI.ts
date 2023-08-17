@@ -3,8 +3,6 @@ import { NotificationOptions } from "../types/types";
 import { goToLink } from "../helpers";
 import ModernPermission from "../Permissions/ModernPermission";
 import AudioNotify from "../setAudio";
-import { AUDNotifierError } from "../errors/AUDNotifierError";
-
 export default class NotificationAPI extends Notify {
   protected Permission: ModernPermission;
   private _id: number = 1;
@@ -31,53 +29,56 @@ export default class NotificationAPI extends Notify {
     }
     if (!this.Permission.isGranted()) {
       this.timeout = false;
-      throw new AUDNotifierError(
-        "you must allow notification to send browser notification"
-      );
+      console.error("AUDNotifierError: you must allow notification to send browser notification");
+      return false
     }
+    return true
   }
 
   async _showNotification(title: string, options: NotificationOptions) {
-    await this._checkPermission();
-    let { audio, onClick, onClose, onShow, onError, redirect, closeAfter } =
-      options;
-    let notificationOptions = { ...options };
-    delete notificationOptions.audio,
-      notificationOptions.onClick,
-      notificationOptions.onClose,
-      notificationOptions.onError,
-      notificationOptions.onShow;
-    notificationOptions.slient = await AudioNotify.setTone(audio);
-    let notify: any = new Notification(title, options);
-    if (
-      audio &&
-      !AudioNotify.running &&
-      notify &&
-      AudioNotify.tone &&
-      typeof AudioNotify.tone != "string"
-    ) {
-      AudioNotify.tone.start(0);
-      AudioNotify.running = true;
-    }
-
-    this.notifications[options?.tag || "customtag" + this._id++] = notify;
-    notify.onshow = async (e: Event) => {
-      typeof onShow == "function" && onShow(e);
-    };
-    typeof closeAfter == "number" &&
-      setTimeout(() => notify.close(), closeAfter);
-    notify.onclick = (e: Event) => {
-      typeof onClick == "function" && onClick(e);
-
-      goToLink(redirect);
-    };
-
-    notify.onerror = onError;
-    notify.onclose = (e: any) => {
-      delete this.notifications[options?.tag || "customtag" + this._id];
-      typeof onClick == "function" && onClose(e);
-    };
-    return notify;
+   if ( await this._checkPermission()) {
+    
+     let { audio, onClick, onClose, onShow, onError, redirect, closeAfter } =
+     options;
+     let notificationOptions = { ...options };
+     delete notificationOptions.audio,
+     notificationOptions.onClick,
+     notificationOptions.onClose,
+     notificationOptions.onError,
+     notificationOptions.onShow;
+     notificationOptions.slient = await AudioNotify.setTone(audio);
+     let notify: any = new Notification(title, options);
+     if (
+       audio &&
+       !AudioNotify.running &&
+       notify &&
+       AudioNotify.tone &&
+       typeof AudioNotify.tone != "string"
+       ) {
+         AudioNotify.tone.start(0);
+         AudioNotify.running = true;
+        }
+        
+        this.notifications[options?.tag || "customtag" + this._id++] = notify;
+        notify.onshow = async (e: Event) => {
+          typeof onShow == "function" && onShow(e);
+        };
+        typeof closeAfter == "number" &&
+        setTimeout(() => notify.close(), closeAfter);
+        notify.onclick = (e: Event) => {
+          typeof onClick == "function" && onClick(e);
+          
+          goToLink(redirect);
+        };
+        
+        notify.onerror = onError;
+        notify.onclose = (e: any) => {
+          delete this.notifications[options?.tag || "customtag" + this._id];
+          typeof onClick == "function" && onClose(e);
+        };
+        return notify;
+      }
+      return {close:()=>{}} 
   }
   /**
    * close notification by tag
