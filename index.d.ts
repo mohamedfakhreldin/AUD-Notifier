@@ -4,12 +4,12 @@ declare module 'aud-notifier' {
 class AUDNotifier {
     Permission: Permission;
 
-    sendNotification(title: string, options:NotificationOptions): Promise
-    sendDesktopNotification(title: string, options:NotificationOptions): Promise|Object
-    sendMobileNotification(title: string, options:NotificationOptions): Promise|Object
-    sendMobileNotificationRepeatedly(title: string, options:NotificationOptions ,numberOfRepeat:number=1,repeatAfter:number|number[]): void|Object
-    sendDesktopNotificationRepeatedly(title: string, options:NotificationOptions ,numberOfRepeat:number=1,repeatAfter:number|number[]): void|Object
-    sendNotificationRepeatedly(title: string, options:NotificationOptions ,numberOfRepeat:number=1,repeatAfter:number|number[]): void
+    sendNotification(title: string, options:NotificationOptions): Promise<any>
+    sendDesktopNotification(title: string, options:NotificationOptions): Promise<any>|Object
+    sendMobileNotification(title: string, options:NotificationOptions): Promise<any>|Object
+    sendMobileNotificationRepeatedly(title: string, options:NotificationOptions ,numberOfRepeat:number,repeatAfter:number|number[]): void|Object
+    sendDesktopNotificationRepeatedly(title: string, options:NotificationOptions ,numberOfRepeat:number,repeatAfter:number|number[]): void|Object
+    sendNotificationRepeatedly(title: string, options:NotificationOptions ,numberOfRepeat:number,repeatAfter:number|number[]): void
 
     close(tag: string): void;
 
