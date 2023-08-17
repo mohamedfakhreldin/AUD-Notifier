@@ -14,7 +14,7 @@ AUDNotifier is Javascript Library make use browser notification easily
 npm install aud-notifier
 ```
 
-use `notify init` to add  Notifier Service Worker file to your public path
+use `notify init` to add Notifier Service Worker file to your public path
 
 ## sendNotification
 
