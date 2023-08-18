@@ -16,7 +16,7 @@ export default class ServiceWorkerNotification extends Notify {
     super(options, platform, browser, version);
     this._config = {
       file: "service-worker.js",
-      scope: "/",
+      scope: "./",
     };
     this.Permission = this.Permission || new ModernPermission();
     navigator.serviceWorker.register(this._config.file);
@@ -64,12 +64,10 @@ export default class ServiceWorkerNotification extends Notify {
         if (navigator.serviceWorker.ready) {
           return navigator.serviceWorker.getRegistration().then(async (reg) => {
             let notifications = await reg.getNotifications();
-            notifications.some((notify) => {
-              
-            });
+          
             let notify;
             oldNotificationClose?.close();
-            options.data =  !(options.data instanceof Object) || {};
+            options.data =  options.data instanceof Object? options.data : {};
             options.data.redirect = redirect;
             options.slient = await AudioNotify.setTone(audio);
             options.data.onClick = this._handleEvents(onClick);
