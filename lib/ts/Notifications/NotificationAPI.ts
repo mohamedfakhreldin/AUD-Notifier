@@ -29,28 +29,31 @@ export default class NotificationAPI extends Notify {
     }
     if (!this.Permission.isGranted()) {
       this.timeout = false;
-      console.error("AUDNotifierError: you must allow notification to send browser notification");
+      
       return false
     }
     return true
   }
 
   async _showNotification(title: string, options: NotificationOptions) {
-   if ( await this._checkPermission()) {
+   return new Promise(async(resolve,reject)=>{
+try{
+
+  if ( await this._checkPermission()) {
     
-     let { audio, onClick, onClose, onShow, onError, redirect, closeAfter } =
-     options;
-     let notificationOptions = { ...options };
-     delete notificationOptions.audio,
-     notificationOptions.onClick,
-     notificationOptions.onClose,
-     notificationOptions.onError,
-     notificationOptions.onShow;
-     notificationOptions.slient = await AudioNotify.setTone(audio);
-     let notify: any = new Notification(title, options);
-     if (
-       audio &&
-       !AudioNotify.running &&
+    let { audio, onClick, onClose, onShow, onError, redirect, closeAfter } =
+    options;
+    let notificationOptions = { ...options };
+    delete notificationOptions.audio,
+    notificationOptions.onClick,
+    notificationOptions.onClose,
+    notificationOptions.onError,
+    notificationOptions.onShow;
+    notificationOptions.slient = await AudioNotify.setTone(audio);
+       let notify: any = new Notification(title, options);
+       if (
+         audio &&
+         !AudioNotify.running &&
        notify &&
        AudioNotify.tone &&
        typeof AudioNotify.tone != "string"
@@ -76,11 +79,15 @@ export default class NotificationAPI extends Notify {
           delete this.notifications[options?.tag || "customtag" + this._id];
           typeof onClick == "function" && onClose(e);
         };
-        return notify;
+        resolve(notify)
       }
-      return {close:()=>{}} 
-  }
-  /**
+      reject('AUDNotifierError: you must allow notification to send browser notification')
+    }catch(e){
+      reject(e)
+    }
+    })
+    }
+    /**
    * close notification by tag
    *
    * @param {string} tag

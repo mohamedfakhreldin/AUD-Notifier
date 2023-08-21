@@ -48,7 +48,7 @@ export default class ServiceWorkerNotification extends Notify {
     }
     if(!this.Permission.isGranted()){
       this.timeout = false;
-      console.error("AUDNotifierError: you must allow notification to send browser notification");
+
       return false
     }
     return true
@@ -56,42 +56,52 @@ export default class ServiceWorkerNotification extends Notify {
       
     }
  async _showNotification(title: string, options: NotificationOptions) {
-    let { onClick, onClose, onError, closeAfter, audio, redirect } =
-      this.options;
-      if ( await this._checkPermission()) {
-        
-        let oldNotificationClose;
-        if (navigator.serviceWorker.ready) {
-          return navigator.serviceWorker.getRegistration().then(async (reg) => {
-            let notifications = await reg.getNotifications();
-          
-            let notify;
-            oldNotificationClose?.close();
-            options.data =  options.data instanceof Object? options.data : {};
-            options.data.redirect = redirect;
-            options.slient = await AudioNotify.setTone(audio);
-            options.data.onClick = this._handleEvents(onClick);
-            options.data.onClose = this._handleEvents(onClose);
-        if ( !AudioNotify.running  && AudioNotify.tone && typeof AudioNotify.tone !='string' ) {
-          AudioNotify.tone.start(0)
-          AudioNotify.running = true
+ return new Promise(async(resolve,reject)=>{
+
+   let { onClick, onClose, onError, closeAfter, audio, redirect } =
+   this.options;
+   try{
+     let notify;
+     
+     if ( await this._checkPermission()) {
+       
+       let oldNotificationClose;
+       if (navigator.serviceWorker.ready) {
+         return navigator.serviceWorker.getRegistration().then(async (reg) => {
+           let notifications = await reg.getNotifications();
+           
+           oldNotificationClose?.close();
+           options.data =  options.data instanceof Object? options.data : {};
+           options.data.redirect = redirect;
+           options.slient = await AudioNotify.setTone(audio);
+           options.data.onClick = this._handleEvents(onClick);
+           options.data.onClose = this._handleEvents(onClose);
+           if ( !AudioNotify.running  && AudioNotify.tone && typeof AudioNotify.tone !='string' ) {
+             AudioNotify.tone.start(0)
+             AudioNotify.running = true
+            }
+            reg
+            .showNotification(title, options)
+            .then(async () => {
+              notifications = await reg.getNotifications();
+              notify = notifications[notifications.length - 1];
+              
+              typeof closeAfter == "number" &&
+              setTimeout(()=>notify.close(), closeAfter);
+            })
+            .catch(function (e) {
+           typeof onError =='function' &&   onError(e);
+            });
+          });
         }
-        reg
-        .showNotification(title, options)
-        .then(async () => {
-          notifications = await reg.getNotifications();
-          notify = notifications[notifications.length - 1];
-          
-          typeof closeAfter == "number" &&
-          setTimeout(()=>notify.close(), closeAfter);
-        })
-        .catch(function (e) {
-          onError(e);
-        });
-      });
+        resolve(notify)
+      }
+      reject('AUDNotifierError: you must allow notification to send browser notificatio')
+     
+    }catch(e){
+reject(e)
     }
-  }
-  return {close:()=>{}}
+  })   
 }
   /**
    * close notification by tag
