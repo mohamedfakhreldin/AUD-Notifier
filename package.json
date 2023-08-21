@@ -1,6 +1,6 @@
 {
   "name": "aud-notifier",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "AUD Notifier is JS Library to access Javascript Notification Easily With Many Features",
   "main": "./bin/aud-notifier.js",
   "scripts": {
